@@ -68,6 +68,14 @@ module.exports = function() {
         description: 'Set foreign key suffix (e.g. _id as in post_id)',
         default: 'Id'
       },
+      adapter: {
+        alias: 'a',
+        description: 'Set adapter'
+      },
+      adapterOptions: {
+        alias: 'ao',
+        description: 'Set adapter options'
+      },
       quiet: {
         alias: 'q',
         description: 'Suppress log messages from output'

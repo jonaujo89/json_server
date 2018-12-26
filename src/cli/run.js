@@ -8,6 +8,7 @@ const pause = require('connect-pause')
 const is = require('./utils/is')
 const load = require('./utils/load')
 const jsonServer = require('../server')
+const adapters = require('../adapters')
 
 function prettyPrint(argv, object, rules) {
   const root = `http://${argv.host}:${argv.port}`
@@ -104,6 +105,13 @@ module.exports = function(argv) {
 
     // create db and load object, JSON file, JS or HTTP database
     return load(source).then(db => {
+      if (argv.adapter) {
+        console.log(chalk.gray(`  Apply ${argv.adapter} adapter`))
+        db = adapters(argv.adapter, argv._[1], argv.adapterOptions).setState(
+          db.getState()
+        )
+      }
+
       // Load additional routes
       let routes
       if (argv.routes) {
