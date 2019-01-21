@@ -15,24 +15,32 @@ class EwdBase extends Base {
     return this._documentStore
   }
 
-  read() {
+  open() {
     this.db.open()
+  }
+
+  close() {
+    this.db.close()
+  }
+
+  read() {
+    this.open()
 
     const node = new this.documentStore.DocumentNode(this.documentName)
     const data = node.getDocument(true)
 
-    this.db.close()
+    this.close()
 
     return data
   }
 
   write(data) {
-    this.db.open()
+    this.open()
 
     const node = new this.documentStore.DocumentNode(this.documentName)
     node.setDocument(data)
 
-    this.db.close()
+    this.close()
   }
 }
 
