@@ -7,6 +7,7 @@ const enableDestroy = require('server-destroy')
 const pause = require('connect-pause')
 const is = require('./utils/is')
 const load = require('./utils/load')
+const read = require('./utils/read')
 const jsonServer = require('../server')
 const adapters = require('../adapters')
 
@@ -79,7 +80,8 @@ function createApp(db, routes, middlewares, argv) {
 }
 
 module.exports = function(argv) {
-  const source = argv._[0]
+  const { source, destination } = read(argv._)
+
   let app
   let server
 
@@ -103,13 +105,32 @@ module.exports = function(argv) {
 
     server = undefined
 
+    const opts = {
+      ignoreInvalidSource: source === false
+    }
+
     // create db and load object, JSON file, JS or HTTP database
-    return load(source).then(db => {
+    return load(source, opts).then(db => {
       if (argv.adapter) {
         console.log(chalk.gray(`  Apply ${argv.adapter} adapter`))
-        db = adapters(argv.adapter, argv._[1], argv.adapterOptions).setState(
-          db.getState()
-        )
+
+        if (opts.ignoreInvalidSource) {
+          db = adapters(argv.adapter, destination, argv.adapterOptions)
+        } else {
+          const state = db.getState()
+          db = adapters(argv.adapter, destination, argv.adapterOptions).setState(state)
+          db.write(state)
+        }
+
+        // const state = db.getState()
+        // db = adapters(argv.adapter, destination, argv.adapterOptions)
+        // //db.write(state)
+        // console.log('1', opts)
+        // if (!opts.ignoreInvalidSource) {
+        //   console.log('2',)
+        //   //db.setState(db.getState())
+        // }
+
       }
 
       // Load additional routes

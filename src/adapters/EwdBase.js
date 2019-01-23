@@ -24,23 +24,15 @@ class EwdBase extends Base {
   }
 
   read() {
-    this.open()
-
     const node = new this.documentStore.DocumentNode(this.documentName)
     const data = node.getDocument(true)
-
-    this.close()
 
     return data
   }
 
   write(data) {
-    this.open()
-
     const node = new this.documentStore.DocumentNode(this.documentName)
     node.setDocument(data)
-
-    this.close()
   }
 }
 

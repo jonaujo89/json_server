@@ -1,10 +1,9 @@
 const EwdBase = require('./EwdBase')
-const Gtm = require('nodem').Gtm
 
 class EwdGtm extends EwdBase {
   constructor(documentName, options = {}) {
     super(documentName)
-    this.db = new Gtm()
+    this.db = new require('nodem').Gtm()
   }
 
   open() {

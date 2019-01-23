@@ -3,8 +3,8 @@ const EwdRedisGlobals = require('./EwdRedisGlobals')
 const EwdGtm = require('./EwdGtm')
 
 const registry = {
-  'ewd-redis-globals': EwdRedisGlobals,
-  'ewd-gtm': EwdGtm,
+  'ewd-redis': EwdRedisGlobals,
+  'ewd-gtm': EwdGtm
 }
 
 module.exports = function(adapterName, documentName, adapterOptions) {
@@ -15,8 +15,12 @@ module.exports = function(adapterName, documentName, adapterOptions) {
   }
 
   if (!documentName) {
-    throw new Error(`Missing <documentName> argument`)
+    throw new Error(`Missing <destination> argument`)
   }
 
-  return low(new Adapter(documentName, adapterOptions))
+  const adapter = new Adapter(documentName, adapterOptions)
+
+  adapter.open()
+
+  return low(adapter)
 }

@@ -13,7 +13,7 @@ const example = {
   profile: { name: 'typicode' }
 }
 
-module.exports = function(source) {
+module.exports = function(source, { ignoreInvalidSource = false }) {
   return new Promise((resolve, reject) => {
     if (is.FILE(source)) {
       if (!fs.existsSync(source)) {
@@ -50,6 +50,8 @@ module.exports = function(source) {
       // Run dataFn to generate data
       const data = dataFn()
       resolve(low(new Memory()).setState(data))
+    } else if (ignoreInvalidSource) {
+      resolve(low(new Memory()))
     } else {
       throw new Error(`Unsupported source ${source}`)
     }
