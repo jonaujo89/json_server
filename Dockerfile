@@ -20,7 +20,8 @@ WORKDIR /app
 
 COPY . /app
 RUN chmod +x /app/install_yottadb.sh \
-  && chmod +x /app/run.sh
+  && chmod +x /app/run.sh \
+  && chmod +x /app/ydb
 
 RUN npm install
 
